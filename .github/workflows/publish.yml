@@ -64,18 +64,18 @@ jobs:
       #          docker push ghcr.io/${{ github.actor }}/${IMAGE_NAME}:$TAG
 
 
-#
+
+      - name: Docker login to GHCR
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+
+
+
       - name: Build and Push Docker Image
         run: |
           OWNER_LOWER=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
           docker build -t ghcr.io/${OWNER_LOWER}/${IMAGE_NAME}:$TAG .
           docker push ghcr.io/${OWNER_LOWER}/${IMAGE_NAME}:$TAG
-
-
-
-
-
-
 
 
 
@@ -107,3 +107,6 @@ jobs:
             docker compose -f docker-compose.$ENV.yml down
             docker compose -f docker-compose.$ENV.yml up -d
           EOF
+
+
+
